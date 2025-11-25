@@ -1,43 +1,135 @@
+# 🚗 Car Rental Management System  
+### Java Swing GUI + JSP/Servlet Web App + JDBC + DAO + OOP + Multithreading
 
-# Car Rental System
+A complete Java-based Car Rental System built for academic and professional learning.  
+This project includes both **GUI (Swing)** and **Web (JSP/Servlet)** versions, fully integrated with a database and structured using MVC, DAO, and OOP principles.
 
-## Overview
-A simple Java-based Car Rental System that allows users to:
-- View available cars
-- Rent and return cars
-- Store and manage data with a relational database
+This project fulfills the **Java Review Rubric** requirements:
+✔ OOP  
+✔ Exception Handling  
+✔ Collections & Generics  
+✔ Multithreading  
+✔ DAO + Database  
+✔ GUI  
+✔ Servlet/JSP  
+✔ Code Quality  
 
-## Features
-- Core functionality for renting and returning cars
-- Integrated database connectivity
-- Event-driven GUI (if applicable)
-- Error handling for database and user input
-- Data validation on all input fields
+---
 
-## How to Run
-1. Ensure you have Java and a MySQL-compatible database installed.
-2. Configure the database credentials in `DBConnection.java`.
-3. Compile the project:
-   ```
-   javac -d bin src/*.java
-   ```
-4. Run the application:
-   ```
-   java -cp bin CarRentalApp
-   ```
+# ✨ Features
 
-## Code Structure
-- `Car.java` – Represents car model
-- `CarDAO.java` – Data access operations
-- `DBConnection.java` – Handles database connections
-- `CarRentalApp.java` – Main entry point
-- `TestDB.java` – For DB testing
+## 🎯 Object-Oriented Programming (OOP)
+- `Vehicle` — abstract base class  
+- `Car` — child class (inheritance)  
+- `Rentable` — interface  
+- `CarNotAvailableException` — custom exception  
+- Polymorphism (`getType()`)  
 
-## Enhancements
-- Robust error handling
-- Input validation
-- Cleaner modular code
-- Readable naming conventions
+---
 
-## Author
-[Tarun]
+## 🧠 Collections & Generics
+- Uses `Map<Integer, Car>` for caching  
+- DAO returns `List<Car>`  
+- Thread-safe access using locks  
+
+---
+
+## ⚙️ Multithreading
+- `AutoRefreshThread` updates availability  
+- Read/Write locks avoid race conditions  
+
+---
+
+## 🗄 Database (JDBC + DAO)
+- CRUD operations  
+- Prepared statements  
+- Transactions (commit/rollback)  
+- SQLite-ready  
+- Auto table creation  
+
+---
+
+## 💻 GUI (Java Swing)
+Located in:
+```
+src/com/carrental/CarRentalApp.java
+```
+
+---
+
+## 🌐 Web Version (JSP + Servlet)
+Servlet:
+```
+websrc/com/carrental/web/CarServlet.java
+```
+JSP Pages:
+```
+webapp/views/
+```
+
+---
+
+# 🗂 Project Structure
+
+```
+CarRentalSystem/
+ ├── src/com/carrental/
+ ├── websrc/com/carrental/web/
+ ├── webapp/
+ │     ├── index.jsp
+ │     ├── views/
+ │     └── WEB-INF/
+ ├── README.md
+ └── .gitignore
+```
+
+---
+
+# 🚀 How to Run (GUI)
+
+1. Open the project in IntelliJ IDEA  
+2. Mark `src/` as *Sources Root*  
+3. Run:
+```
+com.carrental.CarRentalApp
+```
+
+---
+
+# 🌐 How to Run (Web Version)
+
+### 1️⃣ Install Tomcat  
+### 2️⃣ Add dependencies:
+- sqlite-jdbc  
+- servlet-api  
+
+### 3️⃣ Configure Artifact  
+### 4️⃣ Run server  
+
+Open:
+```
+http://localhost:8080/CarRentalSystem
+```
+
+---
+
+# 🧪 Database
+SQLite database auto-creates:
+```
+car_rental.db
+```
+
+---
+
+# 📤 Upload to GitHub
+
+1. Create new GitHub repo  
+2. Extract your project ZIP  
+3. Drag & drop files into GitHub  
+4. Commit changes  
+
+---
+
+# 🏆 License
+Free for academic and educational use.
+
