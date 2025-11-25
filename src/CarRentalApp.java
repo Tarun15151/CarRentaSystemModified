@@ -1,70 +1,92 @@
+package com.carrental;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.util.List;
 
-public class CarRentalApp extends JFrame {
-    private CarDAO carDAO;
-    private JTextArea outputArea;
+// Simple Swing GUI demonstrating functionality (MVC usage)
+public class CarRentalApp {
+    private final CarService service;
+    private final JFrame frame;
+    private final DefaultListModel<String> listModel;
 
-    public CarRentalApp() {
-        carDAO = new CarDAO();
-
-        setTitle("Car Rental System");
-        setSize(500, 400);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1));
-
-        JButton btnViewCars = new JButton("View Available Cars");
-        JButton btnRentCar = new JButton("Rent a Car");
-        JButton btnReturnCar = new JButton("Return a Car");
-        outputArea = new JTextArea();
-        JScrollPane scrollPane = new JScrollPane(outputArea);
-
-        btnViewCars.addActionListener(e -> showAvailableCars());
-        btnRentCar.addActionListener(e -> rentCar());
-        btnReturnCar.addActionListener(e -> returnCar());
-
-        panel.add(btnViewCars);
-        panel.add(btnRentCar);
-        panel.add(btnReturnCar);
-        panel.add(scrollPane);
-
-        add(panel);
-        setVisible(true);
+    public CarRentalApp(CarService service) {
+        this.service = service;
+        this.frame = new JFrame("Car Rental System - Demo");
+        this.listModel = new DefaultListModel<>();
     }
 
-    private void showAvailableCars() {
-        List<Car> cars = carDAO.getAllAvailableCars();
-        outputArea.setText("");
-        for (Car c : cars) {
-            outputArea.append("ID: " + c.getId() + ", " + c.getBrand() + " " + c.getModel() + "\n");
+    private void refreshList() {
+        listModel.clear();
+        for (Car c : service.getAvailableCars()) {
+            listModel.addElement(c.toString());
         }
     }
 
-    private void rentCar() {
-        String idStr = JOptionPane.showInputDialog("Enter Car ID to Rent:");
-        String name = JOptionPane.showInputDialog("Enter Customer Name:");
-        int id = Integer.parseInt(idStr);
-        if (carDAO.rentCar(id, name)) {
-            JOptionPane.showMessageDialog(this, "Car rented successfully!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Failed to rent car.");
-        }
+    public void show() {
+        service.seedDemoData();
+        AutoRefreshThread refresher = new AutoRefreshThread(service, 5000);
+        refresher.start();
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(700, 400);
+        frame.setLayout(new BorderLayout());
+
+        JList<String> list = new JList<>(listModel);
+        JScrollPane scroll = new JScrollPane(list);
+        frame.add(scroll, BorderLayout.CENTER);
+
+        JPanel controls = new JPanel();
+        JButton rentBtn = new JButton("Rent Selected Car");
+        JButton returnBtn = new JButton("Return Selected Car");
+        JButton refreshBtn = new JButton("Refresh");
+        controls.add(rentBtn);
+        controls.add(returnBtn);
+        controls.add(refreshBtn);
+        frame.add(controls, BorderLayout.SOUTH);
+
+        refreshBtn.addActionListener(e -> refreshList());
+        rentBtn.addActionListener(e -> {
+            int idx = list.getSelectedIndex();
+            if (idx == -1) {
+                JOptionPane.showMessageDialog(frame, "Select a car to rent.");
+                return;
+            }
+            String item = listModel.get(idx);
+            int id = Integer.parseInt(item.split(":" )[0].trim());
+            try {
+                service.rentCar(id);
+                JOptionPane.showMessageDialog(frame, "Rented car " + id);
+                refreshList();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "Could not rent: " + ex.getMessage());
+            }
+        });
+
+        returnBtn.addActionListener(e -> {
+            String input = JOptionPane.showInputDialog(frame, "Enter Car ID to return:");
+            if (input == null || input.isEmpty()) return;
+            try {
+                int id = Integer.parseInt(input.trim());
+                service.returnCar(id);
+                JOptionPane.showMessageDialog(frame, "Returned car " + id);
+                refreshList();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "Could not return: " + ex.getMessage());
+            }
+        });
+
+        refreshList();
+        frame.setVisible(true);
     }
 
-    private void returnCar() {
-        String idStr = JOptionPane.showInputDialog("Enter Car ID to Return:");
-        int id = Integer.parseInt(idStr);
-        if (carDAO.returnCar(id)) {
-            JOptionPane.showMessageDialog(this, "Car returned successfully!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Failed to return car.");
-        }
-    }
-
+    // Main entry (keeps GUI-only mode if DB driver missing)
     public static void main(String[] args) {
-        new CarRentalApp();
+        CarDAO dao = new CarDAO();
+        CarService service = new CarService(dao);
+        SwingUtilities.invokeLater(() -> new CarRentalApp(service).show());
     }
 }
+
+   
