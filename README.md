@@ -121,15 +121,5 @@ car_rental.db
 
 ---
 
-# 📤 Upload to GitHub
 
-1. Create new GitHub repo  
-2. Extract your project ZIP  
-3. Drag & drop files into GitHub  
-4. Commit changes  
-
----
-
-# 🏆 License
-Free for academic and educational use.
 
