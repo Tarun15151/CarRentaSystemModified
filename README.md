@@ -121,6 +121,46 @@ car_rental.db
 
 ---
 
+## 💳 Transaction Management
+
+**Overview:**
+The Car Rental System includes a comprehensive transaction tracking module that records all rental activities and financial transactions.
+
+### Transaction Features:
+
+- **Transaction Recording**: Automatically logs every rental transaction with timestamps
+- **Financial Tracking**: Tracks rental costs, deposits, and payment methods
+- **Transaction History**: Maintains complete history of all transactions
+- **Payment Status**: Records payment completion and status
+- **Multi-currency Support**: CurrencyConverter utility for international transactions
+- **Transaction Reports**: Generate transaction summaries and financial reports
+
+### Transaction Data Captured:
+
+- **Transaction ID**: Unique identifier for each transaction
+- **Customer ID**: Link to the renting customer
+- **Car ID**: Vehicle being rented
+- **Rental Date**: Date when rental started
+- **Return Date**: Expected/actual return date
+- **Total Cost**: Calculated rental amount
+- **Payment Method**: How payment was made
+- **Transaction Status**: Pending/Completed/Failed
+- **Timestamp**: When the transaction was recorded
+
+### Web Interface for Transactions:
+
+JSP Pages:
+
+`addTransaction.jsp` - Form to add new transactions
+
+`listTransactions.jsp` - Display all transaction records
+
+### Database Support:
+
+Transactions are persisted in SQLite database with proper indexing for fast queries and reporting.
+
+---
+
 # Author 
 Tarun
 
